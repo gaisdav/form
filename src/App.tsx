@@ -7,7 +7,6 @@ import {
   ISelectChangeParams,
   ISelectOpenParams,
 } from "./types.ts";
-import css from "./App.module.css";
 
 const Option = Select.Option;
 
@@ -169,7 +168,7 @@ export const App: FC = () => {
           return (
             <Select
               value={selectedOptions[cellId]?.id}
-              className={css.select}
+              style={{ width: "100%" }}
               showSearch
               placeholder="Search"
               onSearch={onSearch}
