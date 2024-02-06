@@ -7,11 +7,13 @@ import {
   ISelectChangeParams,
   ISelectOpenParams,
 } from "./types.ts";
+import css from "./App.module.css";
 
 const Option = Select.Option;
 
 export const App: FC = () => {
   const [rowCount, setRowCount] = useState<number>(2);
+  const [errorId, setErrorId] = useState<string | null>(null);
   const [openedCellData, setOpenedCellData] = useState<IOption | null>(null);
   const [searchValue, setSearchValue] = useState<string>("");
   const [selectedOptions, setSelectedOptions] = useState<
@@ -27,6 +29,7 @@ export const App: FC = () => {
    */
   const onSearch = (value: string) => {
     setSearchValue(value);
+    setErrorId(null);
   };
 
   /**
@@ -54,6 +57,11 @@ export const App: FC = () => {
    * Добавляет опцию в список
    */
   const handleAddOption = (parentId: string | null) => {
+    if (!searchValue.match(/^\d+\.\d+$/)) {
+      setErrorId(openedCellData?.id || "");
+      return;
+    }
+
     setOptions([
       ...options,
       {
@@ -129,6 +137,7 @@ export const App: FC = () => {
     });
 
     setSelectedOptions(_selectedOptions);
+    setErrorId(null);
   };
 
   /**
@@ -184,9 +193,17 @@ export const App: FC = () => {
               }
               notFoundContent={
                 searchValue ? (
-                  <Button onClick={() => handleAddOption(parentId)}>
-                    Добавить
-                  </Button>
+                  <>
+                    <Button onClick={() => handleAddOption(parentId)}>
+                      Добавить
+                    </Button>
+                    {errorId === cellId && (
+                      <span className={css.errorText}>
+                        Добавляемое значение не соответсвует формату
+                        "number.number"
+                      </span>
+                    )}
+                  </>
                 ) : (
                   "Нет данных"
                 )
