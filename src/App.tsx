@@ -117,6 +117,7 @@ export const App: FC = () => {
   const handleSelectChange = ({ value, cellId }: ISelectChangeParams) => {
     const [level, row] = cellId.split(".").map(Number);
     const _selectedOptions = { ...selectedOptions };
+
     _selectedOptions[cellId] = options.find(
       (option) => option.id === value,
     ) as IOption;
@@ -127,6 +128,7 @@ export const App: FC = () => {
         delete _selectedOptions[key];
       }
     });
+
     setSelectedOptions(_selectedOptions);
   };
 
@@ -170,6 +172,17 @@ export const App: FC = () => {
               className={css.select}
               showSearch
               placeholder="Search"
+              onSearch={onSearch}
+              filterOption={true}
+              onChange={(value: string) => {
+                handleSelectChange({ value, row, level, cellId });
+              }}
+              onDropdownVisibleChange={(open) =>
+                handleOpen(open, {
+                  cellId,
+                  parentId,
+                })
+              }
               notFoundContent={
                 searchValue ? (
                   <Button onClick={() => handleAddOption(parentId)}>
@@ -179,17 +192,6 @@ export const App: FC = () => {
                   "Нет данных"
                 )
               }
-              onDropdownVisibleChange={(open) =>
-                handleOpen(open, {
-                  cellId,
-                  parentId,
-                })
-              }
-              onChange={(value: string) => {
-                handleSelectChange({ value, row, level, cellId });
-              }}
-              onSearch={onSearch}
-              filterOption={true}
             >
               {filteredOptions}
             </Select>
