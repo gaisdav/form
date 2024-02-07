@@ -8,6 +8,7 @@ import {
   ISelectOpenParams,
 } from "./types.ts";
 import css from "./App.module.css";
+import { initialOptions } from "./constants.ts";
 
 const Option = Select.Option;
 
@@ -22,7 +23,7 @@ export const App: FC = () => {
   const [rowCountInputValue, setRowCountInputValue] = useState<string | null>(
     "",
   );
-  const [options, setOptions] = useState<IOption[]>([]);
+  const [options, setOptions] = useState<IOption[]>(initialOptions);
 
   /**
    * Обрабатывает изменение значения в поле поиска опций
